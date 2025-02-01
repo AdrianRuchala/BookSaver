@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.droidcode.apps.booksaver.data.Book
 
-class BookViewModel() : ViewModel() {
+class BookViewModel : ViewModel() {
     var bookState = mutableStateOf(BooksState())
 
     private val bookDao = BookSaverApp.db.bookDao()
@@ -12,28 +12,41 @@ class BookViewModel() : ViewModel() {
     fun onAction(action: BookIntent) {
         when (action) {
             is BookIntent.LoadBooks -> loadBooks()
+            is BookIntent.LoadBookData -> loadBookData(action.book.id)
             is BookIntent.AddBook -> addBook(action.book)
-            is BookIntent.UpdateBook -> updateBook()
+            is BookIntent.UpdateBook -> updateBook(
+                action.bookId,
+                action.bookTitle,
+                action.authorFirstName,
+                action.authorLastName
+            )
             is BookIntent.DeleteBook -> deleteBook()
 
         }
     }
 
-    private fun loadBooks(){
+    private fun loadBooks() {
         bookState.value.books = bookDao.getAllBooks()
     }
 
-    private fun addBook(newBook: Book){
+    private fun loadBookData(bookId: Int){
+        bookDao.getSingleBookData(bookId)
+    }
+
+    private fun addBook(newBook: Book) {
         bookDao.insertBook(newBook)
-        loadBooks()
     }
 
-    private fun updateBook(){
-
-
+    private fun updateBook(
+        bookId: Int,
+        newTitle: String,
+        newAuthorFirstName: String,
+        newAuthorLastName: String
+    ) {
+        bookDao.updateBook(bookId, newTitle, newAuthorFirstName, newAuthorLastName)
     }
 
-    private fun deleteBook(){
+    private fun deleteBook() {
 
     }
 

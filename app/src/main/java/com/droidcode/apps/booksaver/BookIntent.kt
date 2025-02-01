@@ -4,6 +4,7 @@ import com.droidcode.apps.booksaver.data.Book
 
 sealed class BookIntent {
     data class LoadBooks(val books: BooksState) : BookIntent()
+    data class LoadBookData(val book: Book) : BookIntent()
     data class AddBook(val book: Book) : BookIntent()
     data class DeleteBook(val book: Book) : BookIntent()
     data class UpdateBook(

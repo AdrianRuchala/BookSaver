@@ -3,6 +3,7 @@ package com.droidcode.apps.booksaver.views
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -36,7 +38,12 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun BookListScreen(modifier: Modifier, viewModel: BookViewModel, navigateToBookAddScreen: () -> Unit) {
+fun BookListScreen(
+    modifier: Modifier,
+    viewModel: BookViewModel,
+    navigateToBookAddScreen: () -> Unit,
+    navigateToBookDetails: (String) -> Unit
+) {
 
     CoroutineScope(Dispatchers.IO).launch {
         viewModel.onAction(BookIntent.LoadBooks(BooksState()))
@@ -47,9 +54,11 @@ fun BookListScreen(modifier: Modifier, viewModel: BookViewModel, navigateToBookA
         topBar = { TopBar(modifier) }
     ) { padding ->
 
-        LazyColumn(modifier.fillMaxSize().padding(padding)) {
+        LazyColumn(modifier
+            .fillMaxSize()
+            .padding(padding)) {
             items(viewModel.bookState.value.books) { book ->
-                BookPlate(modifier, book)
+                BookPlate(modifier, book) { navigateToBookDetails(book.id.toString()) }
             }
         }
     }
@@ -86,12 +95,12 @@ fun AddBookFloatingButton(navigateToBookAddScreen: () -> Unit) {
 }
 
 @Composable
-fun BookPlate(modifier: Modifier, bookState: Book){
+fun BookPlate(modifier: Modifier, bookState: Book, navigateToBookDetails: (String) -> Unit) {
     Column(
         modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .border(4.dp, MaterialTheme.colorScheme.primary ,shape = MaterialTheme.shapes.small)
+            .border(4.dp, MaterialTheme.colorScheme.primary, shape = MaterialTheme.shapes.small)
             .background(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.shapes.small),
         verticalArrangement = Arrangement.Center
     ) {
@@ -109,6 +118,15 @@ fun BookPlate(modifier: Modifier, bookState: Book){
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(text = "${bookState.authorLastName} ${bookState.authorLastName} ")
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    modifier = modifier
+                        .clickable { navigateToBookDetails(bookState.id.toString()) }
+                )
             }
         }
     }

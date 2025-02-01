@@ -13,5 +13,5 @@ object AddBookScreen : BookSaverDestinations {
 }
 
 object BookDetailsScreen : BookSaverDestinations {
-    override val route = "bookDetailsScreen"
+    override val route = "bookDetailsScreen?bookId={bookId}"
 }
