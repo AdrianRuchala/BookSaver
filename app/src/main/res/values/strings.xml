@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">BookSaver</string>
+    <string name="title">Title:</string>
+    <string name="author">Author:</string>
+    <string name="title_label">Title</string>
+    <string name="author_first_name_label">Author first name</string>
+    <string name="author_last_name_label">Author last name</string>
+    <string name="save">Save</string>
+    <string name="saved_books">Saved books</string>
+    <string name="add_book">Add book</string>
 </resources>

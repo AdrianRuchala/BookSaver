@@ -1,6 +1,8 @@
 package com.droidcode.apps.booksaver.data
 
 import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
@@ -18,8 +20,13 @@ interface BookDao {
         newTitle: String,
         newAuthorFirstName: String,
         newAuthorLastName: String
-    ): Book
+    ): Int
 
-    @Query("DELETE FROM book WHERE id = (:bookId)")
-    fun deleteBook(bookId: Int): Book
+    @Insert
+    fun insertBook(book: Book): Long
+
+    @Delete
+    fun deleteBook(book: Book): Int
+//    @Query("DELETE FROM book WHERE id = (:bookId)")
+//    fun deleteBook(bookId: Int): Book
 }

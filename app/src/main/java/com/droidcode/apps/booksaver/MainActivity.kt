@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.droidcode.apps.booksaver.ui.theme.BookSaverTheme
 
@@ -18,13 +19,14 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val navController = rememberNavController()
+            val viewModel: BookViewModel = viewModel()
 
             BookSaverTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(modifier = Modifier, navController = navController)
+                    MainScreen(modifier = Modifier, navController = navController, viewModel)
                 }
             }
         }

@@ -8,8 +8,8 @@ import androidx.navigation.NavHostController
 import com.droidcode.apps.booksaver.navigation.BookSaverNavHost
 
 @Composable
-fun MainScreen(modifier: Modifier, navController: NavHostController){
+fun MainScreen(modifier: Modifier, navController: NavHostController, viewModel: BookViewModel){
     Scaffold() { padding ->
-        BookSaverNavHost(modifier.padding(padding), navController)
+        BookSaverNavHost(modifier.padding(padding), navController, viewModel)
     }
 }
