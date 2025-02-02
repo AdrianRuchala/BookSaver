@@ -38,7 +38,7 @@ fun BookSaverNavHost(
                 Modifier,
                 viewModel,
                 { navController.navigateSingleTopTo(AddBookScreen.route) },
-                { navController.navigateSingleTopTo((BookDetailsScreen.route)) }
+                {  bookId: String -> navController.navigateSingleTopTo("bookDetailsScreen/$bookId")  }
             )
         }
 
@@ -47,7 +47,7 @@ fun BookSaverNavHost(
         }
 
         composable(BookDetailsScreen.route) { backStackEntry ->
-            val bookId = backStackEntry.arguments?.getInt("bookId") ?: 0
+            val bookId = backStackEntry.arguments?.getString("bookId")?.toInt() ?: 0
             CoroutineScope(Dispatchers.IO).launch {
                 viewModel.onAction(BookIntent.LoadBooks(BooksState()))
             }

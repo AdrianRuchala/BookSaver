@@ -1,5 +1,6 @@
 package com.droidcode.apps.booksaver.views
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,11 +29,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.droidcode.apps.booksaver.BookIntent
 import com.droidcode.apps.booksaver.BookViewModel
+import com.droidcode.apps.booksaver.BooksState
 import com.droidcode.apps.booksaver.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun BookDetailsScreen(
     modifier: Modifier,
@@ -44,6 +47,10 @@ fun BookDetailsScreen(
     var authorFirstName by remember { mutableStateOf("") }
     var authorLastName by remember { mutableStateOf("") }
 
+
+    CoroutineScope(Dispatchers.IO).launch {
+        viewModel.onAction(BookIntent.LoadBooks(BooksState()))
+    }
     val bookData = viewModel.bookState.value.books.find { it.id == bookId }
     bookData?.let {
         bookTitle = bookData.title.toString()

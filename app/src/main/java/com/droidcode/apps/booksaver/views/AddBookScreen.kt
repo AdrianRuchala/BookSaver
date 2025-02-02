@@ -96,6 +96,7 @@ fun AddBookScreen(modifier: Modifier, viewModel: BookViewModel, navigateUp: () -
                 if (bookTitle.isNotEmpty() && authorFirstName.isNotEmpty() && authorLastName.isNotEmpty()) {
                     CoroutineScope(Dispatchers.IO).launch {
                         viewModel.onAction(BookIntent.AddBook(newBook))
+                        navigateUp()
                     }
                 }
             }) {
