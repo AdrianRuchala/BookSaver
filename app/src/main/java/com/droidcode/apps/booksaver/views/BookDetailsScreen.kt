@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -31,6 +32,7 @@ import com.droidcode.apps.booksaver.BookIntent
 import com.droidcode.apps.booksaver.BookViewModel
 import com.droidcode.apps.booksaver.BooksState
 import com.droidcode.apps.booksaver.R
+import com.droidcode.apps.booksaver.data.Book
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,7 +60,11 @@ fun BookDetailsScreen(
         authorLastName = bookData.authorLastName.toString()
     }
 
-    Scaffold(topBar = { TopBar(modifier) { navigateUp() } }) { padding ->
+    Scaffold(topBar = {
+        if (bookData != null) {
+            TopBar(modifier, viewModel, bookData) { navigateUp() }
+        }
+    }) { padding ->
         modifier.padding(padding)
 
         Column(
@@ -130,7 +136,12 @@ fun BookDetailsScreen(
 }
 
 @Composable
-private fun TopBar(modifier: Modifier, navigateUp: () -> Unit) {
+private fun TopBar(
+    modifier: Modifier,
+    viewModel: BookViewModel,
+    book: Book,
+    navigateUp: () -> Unit
+) {
     Column(
         modifier
             .fillMaxWidth()
@@ -138,7 +149,7 @@ private fun TopBar(modifier: Modifier, navigateUp: () -> Unit) {
     ) {
         Row(
             modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(120.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -154,6 +165,18 @@ private fun TopBar(modifier: Modifier, navigateUp: () -> Unit) {
                 modifier = Modifier
                     .padding(all = 8.dp),
                 style = MaterialTheme.typography.titleMedium,
+            )
+
+            Icon(
+                imageVector = Icons.Filled.Delete,
+                contentDescription = null,
+                modifier = Modifier
+                    .clickable {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            viewModel.onAction(BookIntent.DeleteBook(book))
+                        }
+                        navigateUp()
+                    }
             )
         }
         HorizontalDivider(modifier = Modifier.padding(top = 8.dp, bottom = 8.dp))

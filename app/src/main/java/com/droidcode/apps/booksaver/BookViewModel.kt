@@ -12,7 +12,6 @@ class BookViewModel : ViewModel() {
     fun onAction(action: BookIntent) {
         when (action) {
             is BookIntent.LoadBooks -> loadBooks()
-            is BookIntent.LoadBookData -> loadBookData(action.book.id)
             is BookIntent.AddBook -> addBook(action.book)
             is BookIntent.UpdateBook -> updateBook(
                 action.bookId,
@@ -20,7 +19,7 @@ class BookViewModel : ViewModel() {
                 action.authorFirstName,
                 action.authorLastName
             )
-            is BookIntent.DeleteBook -> deleteBook()
+            is BookIntent.DeleteBook -> deleteBook(action.book)
 
         }
     }
@@ -29,9 +28,6 @@ class BookViewModel : ViewModel() {
         bookState.value.books = bookDao.getAllBooks()
     }
 
-    private fun loadBookData(bookId: Int){
-        bookDao.getSingleBookData(bookId)
-    }
 
     private fun addBook(newBook: Book) {
         bookDao.insertBook(newBook)
@@ -46,8 +42,8 @@ class BookViewModel : ViewModel() {
         bookDao.updateBook(bookId, newTitle, newAuthorFirstName, newAuthorLastName)
     }
 
-    private fun deleteBook() {
-
+    private fun deleteBook(book: Book) {
+        bookDao.deleteBook(book)
     }
 
 }
